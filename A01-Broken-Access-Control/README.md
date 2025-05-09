@@ -1,20 +1,39 @@
-## 🧠 Descripción
+DESCRIPCIÓN
+
 Broken Access Control ocurre cuando los usuarios pueden actuar fuera de sus permisos intencionados. Por ejemplo, acceder a archivos o recursos a los que no deberían tener acceso, como `/etc/passwd` en sistemas Linux.
 
-## ⚙️ Entorno de pruebas
+  ENTORNO DE PRUEBAS
 
 - Kali Linux como atacante
 - Metasploitable2 como víctima
 - Conectividad establecida entre ambas VMs
 - IP de la víctima: `192.168.X.X` *(reemplazar por la real)*
 
-## 🔍 Escaneo inicial
 
-Se utilizó el siguiente comando Nmap para detectar servicios y puertos abiertos:
+ACCESO A UN SERVIDOR WEB VULNERABLE (Path Traversal)
 
-```bash
+Realizamos un escaneo de red utilizando el siguiente comando:
+
 nmap -sS -sV -O 192.168.X.X
 
+Con este escaneo identificamos los servicios y puertos abiertos. Detectamos un servicio HTTP corriendo en el puerto 80, lo que indica que existe un servidor web. Accedemos a la IP en un navegador para inspeccionar el sitio, y encontramos la aplicación Mutillidae, hacemos clic en "Mutillidae".
+Mutillidae es una aplicación web diseñada para practicar pruebas de penetración (pentesting), basada en el proyecto OWASP.
+![Acceso a la página principal](evidencia/1homepage.png)
+
+En el menú principal, accedemos a OWASP TOP 10 y luego seleccionamos:
+A4 - Insecure Direct Object References Posteriormente, hacemos clic en Text File Viewer
+![Menú OWASP en Mutillidae](evidencia/2Menú.png)
+
+Observamos que en la barra de direcciones del navegador aparece el parámetro page=TextFileViewer.php. Esta es una señal de que el sitio podría ser vulnerable a Path Traversal.
+![URL vulnerable detectada](evidencia/3URL_Vulnerable.png)
+
+Probamos la vulnerabilidad modificando la URL de la siguiente forma:
+
+?page=../../../../etc/passwd
+El uso de ../ nos permite subir directorios en el sistema de archivos. Aunque no hay un límite estricto, normalmente con 4 niveles es suficiente para llegar a la raíz (/).
+Al ejecutar esta modificación y presionar Enter, el contenido del archivo /etc/passwd se muestra en pantalla.
+Este archivo contiene información sobre los usuarios del sistema. También podemos intentar acceder a otros archivos como /etc/group. Sin embargo, algunos archivos pueden estar restringidos porque no tenemos privilegios de administrador (root), ya que el servidor web se ejecuta bajo un usuario limitado.
+![Acceso al archivo passwd](evidencia/4Path_Traversal.png)
 
 > Autor: Jerson Giraldo  
 > Proyecto: OWASP Top 10 Lab  
