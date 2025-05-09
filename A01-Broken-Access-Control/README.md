@@ -13,7 +13,7 @@ ACCESO A UN SERVIDOR WEB VULNERABLE (Path Traversal)
 
 Realizamos un escaneo de red utilizando el siguiente comando:
 
-![Escaneo](evidencia/Comando-Nmap.png)
+![Escaneo](evidencia/5Comando-Nmap.png)
 
 Con este escaneo identificamos los servicios y puertos abiertos. Detectamos un servicio HTTP ejecutándose en el puerto 80, lo que indica la presencia de un servidor web.
 Accedemos a la IP en un navegador y encontramos la aplicación Mutillidae. Hacemos clic en “Mutillidae” para ingresar al entorno de pruebas.
