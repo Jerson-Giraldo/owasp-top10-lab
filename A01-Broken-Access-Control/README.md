@@ -33,7 +33,9 @@ Observamos que en la barra de direcciones del navegador aparece el parámetro pa
 Probamos la vulnerabilidad modificando la URL de la siguiente forma: (Relative Path Traversal o Absolute Path Travesal)
 
 (Relative)?page=../../../../etc/passwd
+
 (Absolute)?page=/etc/passwd
+
 El uso de ../ nos permite subir directorios en el sistema de archivos. Aunque no hay un límite estricto, normalmente con 4 niveles es suficiente para llegar a la raíz (/).
 Al ejecutar esta modificación y presionar Enter, el contenido del archivo /etc/passwd se muestra en pantalla.
 Este archivo contiene información sobre los usuarios del sistema. También podemos intentar acceder a otros archivos como /etc/group. Sin embargo, algunos archivos pueden estar restringidos porque no tenemos privilegios de administrador (root), ya que el servidor web se ejecuta bajo un usuario limitado.
