@@ -42,6 +42,16 @@ Este archivo contiene información sobre los usuarios del sistema. También pode
 
 ![Acceso al archivo passwd](evidencia/4Path_Traversal.png)
 
+En algunas ocasiones, los servidores web están configurados de forma que filtran o eliminan secuencias como ../ de la URL, evitando que el atacante pueda navegar por el sistema de archivos. Sin embargo, existen técnicas para evadir estos filtros, como:
+
+    Usar secuencias visualmente similares: ....// (equivalente a ../)
+
+    Usar codificación URL: %2e%2e%2f (versión codificada de ../)
+
+    Usar patrones que explotan errores de decodificación: ..%c0%af
+
+Estas técnicas pueden burlar filtros simples que solo buscan coincidencias exactas con la cadena ../, permitiendo que el atacante logre el mismo efecto de path traversal si el sistema no maneja correctamente la validación y normalización de rutas.
+
 > Autor: Jerson Giraldo  
 > Proyecto: OWASP Top 10 Lab  
 > Año: 2025
