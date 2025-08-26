@@ -42,7 +42,7 @@ para saber cuál es la ip normalmente la dirección MAC empieza con el
 prefijo 08:00:27 y tiene muchos puertos abiertos: FTP, SSH, Telnet,
 HTTP, MySQL, PostgreSQL, etc., algo normal en Metasploitable2.
 
-[Imagen 1](evidencia/1.png)
+![Imagen 1](evidencia/1.png)
 
 -T2: Define una velocidad lenta y sigilosa. Nmap tiene niveles de 0
 (paranoico) a 5 (rápido/agresivo). T2 es considerado "polite" y evita
@@ -55,27 +55,27 @@ completa el handshake TCP (más difícil de detectar que -sT).
 
 (salida del escaneo)
 
-[Imagen 2](evidencia/2.png)
+![Imagen 2](evidencia/2.png)
 
 ## 2. Acceso a DVWA
 
 Ingresar la ip de metasploitable2 192.168.x.x
 
-[Imagen 3](evidencia/3.png)
+![Imagen 3](evidencia/3.png)
 
 Se visualiza la app metasploitable2 seleccionamos DVWA
 
-[Imagen 4](evidencia/4.png)
+![Imagen 4](evidencia/4.png)
 
 se visualiza ventana de credenciales, ingresamos credenciales por
 defecto, usuario: Admin y contraseña: password y hacemos clic en "login"
 
-[Imagen 5](evidencia/5.png)
+![Imagen 5](evidencia/5.png)
 
 se visualiza menú y hacemos clic en "DVWA Security" para cambiar el
 modo, que por defecto es "High" a modo "Low" y hacemos clic en "Submit"
 
-[Imagen 6](evidencia/6.png)
+![Imagen 6](evidencia/6.png)
 
 Detectar si el campo es vulnerable
 
@@ -84,12 +84,12 @@ ingresamos la inyección manual 1' y hacemos clic en "Submit"
 
 ## 3. Detección de vulnerabilidad
 
-[Imagen 7](evidencia/7.png)
+![Imagen 7](evidencia/7.png)
 
 se visualiza un error de sintaxis, esto quiere decir que la aplicación
 es vulnerable
 
-[Imagen 8](evidencia/8.png)
+![Imagen 8](evidencia/8.png)
 
 al ingresar 1' no es para loguearse, sino para detectar si el campo es
 vulnerable Ejemplo: Supongamos que el formulario hace esta consulta SQL:
@@ -117,7 +117,7 @@ hasta que genere error, en este caso funciona correctamente hasta 1'
 ORDER BY 2 -- y eso nos indica que tenemos dos columnas, "first name" y
 "surname"
 
-[Imagen 9](evidencia/9.png)
+![Imagen 9](evidencia/9.png)
 
 ## 5. Union-based
 
@@ -131,7 +131,7 @@ los valores de prueba eso significa que ya sabemos dónde inyectar datos
 consulta original tuviera 3 columnas, tendria que poner un NULL para
 cuadrar el número de columnas, por ejemplo: 1' UNION SELECT 1, 2, NULL --
 
-[Imagen 10](evidencia/10.png)
+![Imagen 10](evidencia/10.png)
 
 Ahora inyectemos database(), version() -- se visualiza admin en el
 primer bloque y en el segundo bloque se visualiza la base de datos y la
@@ -140,14 +140,14 @@ original sería: SELECT first_name, surname FROM users WHERE id = '1'
 esto me muestra el usuario con id 1 el cual es admin en este caso, en el
 segundo bloque se visualiza el nombre de la base de datos y la versión.
 
-[Imagen 11](evidencia/11.png)
+![Imagen 11](evidencia/11.png)
 
 Luego ingresamos nuestra inyección con 1' UNION SELECT table_name, null
 FROM information_schema.tables WHERE table_schema = 'dvwa' -- esto me
 muestra los nombres de todas las tablas que pertenecen a la base de
 datos dvwa. en este caso las tablas son guestbook y users.
 
-[Imagen 12](evidencia/12.png)
+![Imagen 12](evidencia/12.png)
 
 ## 6. Listar columnas de la tabla users
 
@@ -159,7 +159,7 @@ column_name, null FROM information_schema.columns WHERE table_schema =
 que hay en la tabla users y con esto ya tenemos identificado donde se
 guardan usuarios y contraseñas.
 
-[Imagen 13](evidencia/13.png)
+![Imagen 13](evidencia/13.png)
 
 ## 7. Extraer datos de columnas user y password
 
@@ -168,7 +168,7 @@ el usuario y el hash de la contraseña con todo esto tenemos una
 extracción completa: enumeración de bases de datos, listar tablas,
 columnas y, por último, contraseñas y usuarios.
 
-[Imagen 14](evidencia/14.png)
+![Imagen 14](evidencia/14.png)
 
 ## 8. Crackeo de hashes
 
@@ -184,7 +184,7 @@ Ahora, sabiendo que tipo de hash es, utilizamos el comando head para
 crear un diccionario más pequeño a partir del diccionario rockyou.txt.
 head -n 10000 /usr/share/wordlists/rockyou.txt \> rockyou_small.txt
 
-[Imagen 15](evidencia/15.png)
+![Imagen 15](evidencia/15.png)
 
 Explicación:
 
@@ -200,7 +200,7 @@ luego utilizamos el siguiente comando para crackear:
 
 john --wordlist=rockyou_small.txt --format=raw-md5 hashes.txt
 
-[Imagen 16](evidencia/16.png)
+![Imagen 16](evidencia/16.png)
 
 Explicación:
 
@@ -221,7 +221,7 @@ memoria y poder crackear los hashes
 Salida: John probó cada contraseña de rockyou_small.txt contra cada hash
 en hashes.txt.
 
-[Imagen 17](evidencia/17.png)
+![Imagen 17](evidencia/17.png)
 
 Encontró varias coincidencias:
 
@@ -236,7 +236,7 @@ pablo: letmein
 vemos que en la salida son solo 4 hash, pero si usamos el comando cat
 hashes.txt para abrir nuestro archivo nos muestra que son 5 hashes.
 
-[Imagen 18](evidencia/18.png)
+![Imagen 18](evidencia/18.png)
 
 Lo que pasa es lo siguiente, el usuario admin y el usuario smithy tienen
 el mismo hash, entonces John no imprime hashes duplicados por defecto
@@ -248,11 +248,11 @@ Ahora el siguiente paso es usar este comando: john --show
 --format=raw-md5 hashes.txt para ver las cuentas con sus contraseñas e
 incluso las que comparten el mismo hash.
 
-[Imagen 19](evidencia/19.png)
+![Imagen 19](evidencia/19.png)
 
 Salida: Aquí podemos ver los 5 hash de nuestro documento hashes.txt
 
-[Imagen 20](evidencia/20.png)
+![Imagen 20](evidencia/20.png)
 
 Conclusión
 
